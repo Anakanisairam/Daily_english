@@ -12,7 +12,11 @@ import {
   Coffee,
   User,
   ChevronRight,
-  Volume2
+  Volume2,
+  BookOpen,
+  GraduationCap,
+  X,
+  Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { getGeminiResponse, Message } from './services/gemini';
@@ -30,10 +34,13 @@ const SCENARIOS: Scenario[] = [
   { id: 'daily', title: 'Daily Life', icon: <User className="w-5 h-5" />, description: 'Talk about your day and hobbies.' },
   { id: 'interview', title: 'Job Interview', icon: <Briefcase className="w-5 h-5" />, description: 'Practice common HR questions.' },
   { id: 'restaurant', title: 'Restaurant', icon: <Coffee className="w-5 h-5" />, description: 'Order food and handle requests.' },
+  { id: 'grammar', title: 'Grammar Basics', icon: <BookOpen className="w-5 h-5" />, description: 'Learn Be, Have, and Can forms.' },
+  { id: 'grammar_master', title: 'Grammar Master', icon: <GraduationCap className="w-5 h-5" />, description: 'Tenses, Prepositions, and Articles.' },
 ];
 
 export default function App() {
   const [sessionActive, setSessionActive] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
   const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
   const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
   const [phase, setPhase] = useState<Phase>('warmup');
@@ -200,40 +207,262 @@ export default function App() {
             ))}
           </div>
 
+          <button
+            onClick={() => setShowGuide(true)}
+            className="w-full flex items-center justify-center gap-2 p-4 bg-blue-50 text-blue-700 rounded-2xl font-bold hover:bg-blue-100 transition-colors"
+          >
+            <Info className="w-5 h-5" />
+            Grammar Cheat Sheet (Telugu)
+          </button>
+
           <p className="text-xs text-gray-400 uppercase tracking-widest font-medium">
             Powered by Gemini AI
           </p>
         </motion.div>
+
+        <AnimatePresence>
+          {showGuide && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-white w-full max-w-2xl max-h-[80vh] rounded-3xl overflow-hidden flex flex-col shadow-2xl"
+              >
+                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 rounded-xl text-blue-600">
+                      <BookOpen className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-gray-900">Grammar Cheat Sheet</h2>
+                      <p className="text-sm text-gray-500">Quick rules with Telugu explanations</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => setShowGuide(false)}
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6 text-gray-400" />
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                  {/* Be Forms */}
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm">01</span>
+                      Be Forms (am, is, are)
+                    </h3>
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                      <p className="text-sm text-gray-600">Used to describe a person, place, or thing in the present.</p>
+                      <p className="text-sm font-medium text-blue-800">🇮🇳 ప్రస్తుతం ఒక వ్యక్తి లేదా వస్తువు గురించి చెప్పేటప్పుడు వాడతాము.</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">I am a student.</p>
+                          <p className="text-xs text-gray-500">నేను ఒక విద్యార్థిని.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">She is happy.</p>
+                          <p className="text-xs text-gray-500">ఆమె సంతోషంగా ఉంది.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Have Forms */}
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-green-100 text-green-700 rounded-lg flex items-center justify-center text-sm">02</span>
+                      Have Forms (have, has)
+                    </h3>
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                      <p className="text-sm text-gray-600">Used to show possession (something you own).</p>
+                      <p className="text-sm font-medium text-green-800">🇮🇳 మన దగ్గర ఏదైనా ఉంది అని చెప్పేటప్పుడు వాడతాము.</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">I have a car.</p>
+                          <p className="text-xs text-gray-500">నా దగ్గర ఒక కారు ఉంది.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">He has a pen.</p>
+                          <p className="text-xs text-gray-500">అతని దగ్గర ఒక పెన్ను ఉంది.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Can Forms */}
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center text-sm">03</span>
+                      Can Forms (can, cannot)
+                    </h3>
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                      <p className="text-sm text-gray-600">Used to show ability (something you can do).</p>
+                      <p className="text-sm font-medium text-purple-800">🇮🇳 మనం ఏదైనా చేయగలము అని చెప్పేటప్పుడు వాడతాము.</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">I can speak English.</p>
+                          <p className="text-xs text-gray-500">నేను ఇంగ్లీష్ మాట్లాడగలను.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Example</p>
+                          <p className="text-sm font-semibold">I cannot swim.</p>
+                          <p className="text-xs text-gray-500">నేను ఈత కొట్టలేను.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Prepositions */}
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center text-sm">04</span>
+                      Prepositions (in, on, at)
+                    </h3>
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                      <p className="text-sm text-gray-600">Used to show time and place.</p>
+                      <p className="text-sm font-medium text-amber-800">🇮🇳 సమయం మరియు స్థలం గురించి చెప్పేటప్పుడు వాడతాము.</p>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-sm font-semibold"><span className="text-amber-600">In:</span> I am in the room.</p>
+                          <p className="text-xs text-gray-500">నేను గదిలో ఉన్నాను.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-sm font-semibold"><span className="text-amber-600">On:</span> The book is on the table.</p>
+                          <p className="text-xs text-gray-500">పుస్తకం టేబుల్ మీద ఉంది.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-sm font-semibold"><span className="text-amber-600">At:</span> I am at the office.</p>
+                          <p className="text-xs text-gray-500">నేను ఆఫీసు వద్ద ఉన్నాను.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* Tenses */}
+                  <section className="space-y-4">
+                    <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-red-100 text-red-700 rounded-lg flex items-center justify-center text-sm">05</span>
+                      Simple Tenses (Time)
+                    </h3>
+                    <div className="bg-gray-50 rounded-2xl p-4 space-y-3">
+                      <p className="text-sm text-gray-600">How to talk about different times.</p>
+                      <p className="text-sm font-medium text-red-800">🇮🇳 వివిధ సమయాల గురించి ఎలా మాట్లాడాలి.</p>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Past (నిన్న)</p>
+                          <p className="text-sm font-semibold">I watched a movie.</p>
+                          <p className="text-xs text-gray-500">నేను సినిమా చూశాను.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Present (ఈరోజు)</p>
+                          <p className="text-sm font-semibold">I watch a movie.</p>
+                          <p className="text-xs text-gray-500">నేను సినిమా చూస్తాను.</p>
+                        </div>
+                        <div className="p-3 bg-white rounded-xl border border-gray-200">
+                          <p className="text-xs font-bold text-gray-400 uppercase">Future (రేపు)</p>
+                          <p className="text-sm font-semibold">I will watch a movie.</p>
+                          <p className="text-xs text-gray-500">నేను సినిమా చూస్తాను (భవిష్యత్తులో).</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                <div className="p-6 bg-gray-50 border-t border-gray-100">
+                  <button
+                    onClick={() => setShowGuide(false)}
+                    className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition-colors"
+                  >
+                    Got it!
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
 
   if (phase === 'completed') {
+    const corrections = messages.filter(m => m.correction).map(m => m.correction!);
+    
     return (
       <div className="min-h-screen bg-[#F5F5F5] flex flex-col items-center justify-center p-6 font-sans">
         <motion.div 
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="max-w-md w-full bg-white rounded-3xl p-8 shadow-xl text-center space-y-6"
+          className="max-w-xl w-full bg-white rounded-3xl p-8 shadow-xl space-y-8"
         >
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-10 h-10 text-green-600" />
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold text-gray-900">Session Complete!</h2>
-            <p className="text-gray-500">You practiced for 10 minutes today. Great job!</p>
+          <div className="text-center space-y-4">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+              <CheckCircle2 className="w-10 h-10 text-green-600" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold text-gray-900">Session Complete!</h2>
+              <p className="text-gray-500">You practiced for 10 minutes today. Great job!</p>
+            </div>
           </div>
           
-          <div className="bg-gray-50 rounded-2xl p-4 text-left space-y-3">
-            <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Session Stats</h4>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Messages exchanged</span>
-              <span className="font-bold text-gray-900">{messages.length}</span>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50 rounded-2xl p-4 space-y-1">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Messages</p>
+              <p className="text-2xl font-bold text-gray-900">{messages.length}</p>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600">Scenario</span>
-              <span className="font-bold text-gray-900">{selectedScenario?.title}</span>
+            <div className="bg-gray-50 rounded-2xl p-4 space-y-1">
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Corrections</p>
+              <p className="text-2xl font-bold text-gray-900">{corrections.length}</p>
             </div>
+          </div>
+
+          {corrections.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="font-bold text-gray-900 flex items-center gap-2">
+                <AlertCircle className="w-5 h-5 text-amber-500" />
+                Key Improvements
+              </h3>
+              <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                {corrections.map((c, i) => (
+                  <div key={i} className="p-4 bg-amber-50 rounded-2xl border border-amber-100 space-y-2">
+                    <div className="flex items-start gap-2 text-red-600 text-sm">
+                      <span className="line-through opacity-60">{c.original}</span>
+                    </div>
+                    <div className="flex items-start gap-2 text-green-700 font-medium text-sm">
+                      <span>{c.corrected}</span>
+                    </div>
+                    <p className="text-xs text-amber-800 italic border-t border-amber-200/50 pt-2">
+                      {c.tip}
+                    </p>
+                    <p className="text-xs text-gray-600 font-medium">
+                      🇮🇳 {c.telugu}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <h3 className="font-bold text-gray-900 flex items-center gap-2">
+              <RefreshCw className="w-5 h-5 text-blue-500" />
+              What's Next?
+            </h3>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              Consistency is key! Try to practice another scenario tomorrow to keep your momentum going.
+            </p>
           </div>
 
           <button
@@ -245,7 +474,7 @@ export default function App() {
             className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
           >
             <RefreshCw className="w-5 h-5" />
-            Start New Session
+            Back to Scenarios
           </button>
         </motion.div>
       </div>
