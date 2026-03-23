@@ -1,0 +1,5 @@
+{
+  "name": "SpeakEasy 10",
+  "description": "Master spoken English in 10-minute AI-guided sessions focused on real-life scenarios and instant corrections.",
+  "requestFramePermissions": ["microphone"]
+}
